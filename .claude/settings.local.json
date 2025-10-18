@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "Bash(dir Backend)",
+      "Bash(dir Frontend)",
+      "Bash(dir /b Backend)",
+      "Bash(findstr /v node_modules)",
+      "Bash(dir /b Frontend)",
+      "Bash(mkdir -p src/config src/controllers src/models src/routes src/middlewares src/utils src/services)",
+      "Bash(npm install bcryptjs jsonwebtoken express-validator)",
+      "Bash(npm install react-router-dom axios)",
+      "Bash(npm install -D tailwindcss postcss autoprefixer)",
+      "Bash(npx tailwindcss init -p)",
+      "Bash(node ./node_modules/tailwindcss/lib/cli.js init -p)",
+      "Bash(npm run dev)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
