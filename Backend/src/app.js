@@ -27,6 +27,23 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Routes
+// Root route - API welcome message
+app.get('/', (_, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to PitchCraft API',
+    version: '1.0.0',
+    documentation: '/api',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      pitches: '/api/pitches',
+      users: '/api/users',
+    },
+  });
+});
+
+// API routes
 app.use('/api', routes);
 
 // Error Handling
