@@ -8,13 +8,12 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
 });
 
-// Request interceptor
+// Request interceptor to add token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('pitchcraft_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -25,22 +24,38 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor
+// Response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  (response) => response,
   (error) => {
-    const message = error.response?.data?.message || error.message || 'Something went wrong';
-
-    // Handle unauthorized errors
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
+      // Unauthorized - clear token and redirect to login
+      localStorage.removeItem('pitchcraft_token');
+      localStorage.removeItem('pitchcraft_user');
       window.location.href = '/login';
     }
-
-    return Promise.reject(new Error(message));
+    return Promise.reject(error);
   }
 );
+
+// Auth APIs
+export const authAPI = {
+  register: (data) => api.post('/auth/register', data),
+  login: (data) => api.post('/auth/login', data),
+  getProfile: () => api.get('/auth/me'),
+  updateProfile: (data) => api.put('/auth/profile', data),
+  changePassword: (data) => api.put('/auth/change-password', data),
+};
+
+// Pitch APIs
+export const pitchAPI = {
+  generatePitch: (data) => api.post('/pitches/generate', data),
+  getAllPitches: () => api.get('/pitches'),
+  getPitchById: (id) => api.get(`/pitches/${id}`),
+  updatePitch: (id, data) => api.put(`/pitches/${id}`, data),
+  deletePitch: (id) => api.delete(`/pitches/${id}`),
+  improvePitch: (id, data) => api.post(`/pitches/${id}/improve`, data),
+  exportPitch: (id) => api.post(`/pitches/${id}/export`),
+};
 
 export default api;
